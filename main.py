@@ -14,7 +14,17 @@ ENTRY = (
 )
 
 
+def _validate(text: str) -> None:
+    """Gate guard: the entry must be 1-200 chars of non-blank UTF-8 text."""
+    if not 1 <= len(text) <= 200:
+        raise ValueError(f"entry length {len(text)} outside 1-200 chars")
+    if not text.strip():
+        raise ValueError("entry is only whitespace")
+    text.encode("utf-8")
+
+
 def main() -> None:
+    _validate(ENTRY)
     os.makedirs("/output", exist_ok=True)
     with open("/output/entry.txt", "w", encoding="utf-8") as f:
         f.write(ENTRY)
